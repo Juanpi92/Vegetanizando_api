@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { connectDB } from "./infra/db.js";
 import cors from "cors";
+import { ProductRoutes } from "./routes/product_routes.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,9 @@ app.use(
 
 //Db connection
 connectDB();
+
+//Using product routes
+ProductRoutes(app);
 
 app.get("/", async (req, res) => {
   res.status(200).send({ message: "API is ready to go!" });
