@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-//import { connectDB } from "./infra/db.js";
+import { connectDB } from "./infra/db.js";
 import cors from "cors";
 
 dotenv.config();
@@ -17,6 +17,9 @@ app.use(
     exposedHeaders: ["auth-token"],
   })
 );
+
+//Db connection
+connectDB();
 
 app.get("/", async (req, res) => {
   res.status(200).send({ message: "API is ready to go!" });
