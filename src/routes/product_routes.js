@@ -37,6 +37,7 @@ export const ProductRoutes = (app) => {
     }
   });
 
+  //route to get all Product(Read)
   app.get("/products", async (req, res) => {
     try {
       let products = await Product.find();
@@ -69,6 +70,28 @@ export const ProductRoutes = (app) => {
       res.status(200).send(products);
     } catch (error) {
       res.status(500).json({ error: error });
+    }
+  });
+  //route to del 1 Product(Delete)
+  app.delete("/product/:id", async (req, res) => {
+    try {
+      //get the id
+      let id_product = req.params.id;
+      let src_imagen = await Product.findById(id_product);
+      const deleteCommand = new DeleteObjectCommand({
+        Bucket: process.env.BUCKET_NAME,
+        Key: src_imagen.src,
+      });
+
+      // Command to delete the object from S3
+      await s3.send(deleteCommand);
+      //Deleting the product of the database
+      await Product.findByIdAndDelete(id_product);
+      res.status(200).send({ deleted: true });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Ocurreu um error ao intentar eliminar o produto" });
     }
   });
 };
