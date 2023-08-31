@@ -21,17 +21,40 @@ export const ProductRoutes = (app) => {
     region: process.env.BUCKET_REGION,
   });
   //inserir
-  app.post("/product", validate, async (req, res) => {
-    const { name, portion, price } = req.body;
-    const src = "from AWS";
-    const product = {
-      name,
-      portion,
-      price,
-    };
+  app.post("/product",upload.single("image"), async (req, res) => {
     try {
-      await Product.create(product);
-      res.status(201).send({ message: "Produto inserido exitosamente" });
+      if (!req.file) {
+        return res.status(400).send({ error: "Nenhuma imagem fornecida" });
+      }
+      const { name, portion, price } = req.body;
+
+      //Resize the image
+    let imagen = await sharp(req.file.buffer)
+        .resize({ heigth: 600, width: 400, fit: "contain" })
+      .toBuffer();
+  
+      //Send the image to s3
+      let id_photo =`${uuidv4()}-${req.file.originalname}`;
+      const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: id_photo,
+        Body: imagen,
+        ContentType: req.file.mimetype,
+      };
+
+      const command = new PutObjectCommand(params);
+      await s3.send(command);
+//Create the product and insert the data in the DB
+      let product = {
+        src:id_photo,
+        name: name,
+        portion: portion,
+        price:Number(price)
+      }
+     await Product.create(product)
+
+
+    res.status(201).send({ message: "Produto inserido exitosamente" });
     } catch (error) {
       return res.status(500).send({ error: error });
     }
