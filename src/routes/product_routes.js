@@ -27,6 +27,9 @@ export const ProductRoutes = (app) => {
         return res.status(400).send({ error: "Nenhuma imagem fornecida" });
       }
       const { name, portion, price } = req.body;
+      if (!name ||!portion||!price) {
+        return res.status(400).send({ error: "Debe prencher todos os dados" });
+      }
 
       //Resize the image
     let imagen = await sharp(req.file.buffer)
