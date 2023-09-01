@@ -21,23 +21,23 @@ export const ProductRoutes = (app) => {
     region: process.env.BUCKET_REGION,
   });
   //inserir
-  app.post("/product",upload.single("image"), async (req, res) => {
+  app.post("/product", upload.single("image"), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).send({ error: "Nenhuma imagem fornecida" });
       }
       const { name, portion, price } = req.body;
-      if (!name ||!portion||!price) {
+      if (!name || !portion || !price) {
         return res.status(400).send({ error: "Debe prencher todos os dados" });
       }
 
       //Resize the image
-    let imagen = await sharp(req.file.buffer)
+      let imagen = await sharp(req.file.buffer)
         .resize({ heigth: 600, width: 400, fit: "contain" })
-      .toBuffer();
-  
+        .toBuffer();
+
       //Send the image to s3
-      let id_photo =`${uuidv4()}-${req.file.originalname}`;
+      let id_photo = `${uuidv4()}-${req.file.originalname}`;
       const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: id_photo,
@@ -47,17 +47,16 @@ export const ProductRoutes = (app) => {
 
       const command = new PutObjectCommand(params);
       await s3.send(command);
-//Create the product and insert the data in the DB
+      //Create the product and insert the data in the DB
       let product = {
-        src:id_photo,
+        src: id_photo,
         name: name,
         portion: portion,
-        price:Number(price)
-      }
-     await Product.create(product)
+        price: Number(price),
+      };
+      await Product.create(product);
 
-
-    res.status(201).send({ message: "Produto inserido exitosamente" });
+      res.status(201).send({ message: "Produto inserido exitosamente" });
     } catch (error) {
       return res.status(500).send({ error: error });
     }
@@ -98,6 +97,73 @@ export const ProductRoutes = (app) => {
       res.status(500).json({ error: error });
     }
   });
+
+  app.put("/product/:id", upload.single("image"), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).send({ error: "Nenhuma imagem fornecida" });
+      }
+      const { name, portion, price } = req.body;
+      if (!name || !portion || !price) {
+        return res.status(400).send({ error: "Debe prencher todos os dados" });
+      }
+      //getting the id
+      let id_product = req.params.id;
+      //deleting the old photo
+      let src_imagen = await Product.findById(id_product);
+      const deleteCommand = new DeleteObjectCommand({
+        Bucket: process.env.BUCKET_NAME,
+        Key: src_imagen.src,
+      });
+      await s3.send(deleteCommand);
+
+      //Uploading the new photo
+      let imagen = await sharp(req.file.buffer)
+        .resize({ heigth: 600, width: 400, fit: "contain" })
+        .toBuffer();
+
+      let id_photo = `${uuidv4()}-${req.file.originalname}`;
+      const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: id_photo,
+        Body: imagen,
+        ContentType: req.file.mimetype,
+      };
+      const command = new PutObjectCommand(params);
+      await s3.send(command);
+      //Updating the change in the bd
+      let product = await Product.findByIdAndUpdate(
+        id_product,
+        { src: id_photo, name: name, portion: portion, price: price },
+        { new: true }
+      );
+      //Create the new URL for the photo
+      let getObjectParams = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: product.src,
+      };
+
+      let command2 = new GetObjectCommand(getObjectParams);
+      let url = await getSignedUrl(s3, command2, {
+        expiresIn: 518400,
+      });
+      /* product.url = url;
+      delete product.src;
+      delete product.__v;*/
+
+      product = {
+        url: url,
+        name: product.name,
+        portion: product.portion,
+        price: product.price,
+      };
+
+      res.status(200).send(product);
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  });
+
   //route to del 1 Product(Delete)
   app.delete("/product/:id", async (req, res) => {
     try {
