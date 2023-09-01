@@ -1,15 +1,14 @@
-{
+    "name": "vegetanizando_api",
     "version": 2,
-    "builds": [
-        {
-            "src": "src/app.js",
-            "use": "@vercel/node"
-        }
-    ],
+    "public": true,
+    "build": {
+        "src": "src/app.js",
+        "use": "@vercel/node"
+    },
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/"
+            "dest": "api/index.js"
         }
     ]
 }
