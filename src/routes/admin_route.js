@@ -13,7 +13,7 @@ export const AdminRoutes = (app) => {
     region: process.env.BUCKET_REGION,
   });
 
-  app.get("/login", async (req, res) => {
+  app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).send({ error: "Debe prencher todos os dados" });
@@ -21,7 +21,7 @@ export const AdminRoutes = (app) => {
     try {
       let admin = await Admin.findOne({ email: email });
       if (!admin) {
-        return res.status(404).send("User not found");
+        return res.status(401).send("User not found");
       } else {
         const match = await bcrypt.compare(password, admin.password);
 
@@ -60,11 +60,10 @@ export const AdminRoutes = (app) => {
           };
           return res.status(200).send(admin);
         } else {
-          return res.status(404).send("User not found");
+          return res.status(401).send("User not found");
         }
       }
     } catch (error) {
-      console.log(error);
       return res.status(500).send({ error: error });
     }
   });
