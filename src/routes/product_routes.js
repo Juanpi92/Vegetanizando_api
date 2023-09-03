@@ -98,6 +98,7 @@ export const ProductRoutes = (app) => {
     }
   });
 
+  //Update the product
   app.put("/product/:id", upload.single("image"), async (req, res) => {
     try {
       if (!req.file) {
@@ -150,6 +151,44 @@ export const ProductRoutes = (app) => {
       /* product.url = url;
       delete product.src;
       delete product.__v;*/
+
+      product = {
+        url: url,
+        name: product.name,
+        portion: product.portion,
+        price: product.price,
+      };
+
+      res.status(200).send(product);
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  });
+
+  //Update the product
+  app.patch("/product/:id", async (req, res) => {
+    try {
+      const { name, portion, price } = req.body;
+      if (!name || !portion || !price) {
+        return res.status(400).send({ error: "Debe prencher todos os dados" });
+      }
+      //getting the id
+      let id_product = req.params.id;
+      let product = await Product.findByIdAndUpdate(
+        id_product,
+        { name: name, portion: portion, price: price },
+        { new: true }
+      );
+      //Create the new URL for the photo
+      let getObjectParams = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: product.src,
+      };
+
+      let command2 = new GetObjectCommand(getObjectParams);
+      let url = await getSignedUrl(s3, command2, {
+        expiresIn: 518400,
+      });
 
       product = {
         url: url,
