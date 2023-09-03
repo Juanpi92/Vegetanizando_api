@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { connectDB } from "./infra/db.js";
 import cors from "cors";
 import { ProductRoutes } from "./routes/product_routes.js";
+import { AdminRoutes } from "./routes/admin_route.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,9 @@ connectDB();
 
 //Using product routes
 ProductRoutes(app);
+
+//Using admin route
+AdminRoutes(app);
 
 app.get("/", async (req, res) => {
   res.status(200).send({ message: "API is ready to go!" });
