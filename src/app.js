@@ -6,6 +6,7 @@ import cors from "cors";
 import { ProductRoutes } from "./routes/product_routes.js";
 import { AdminRoutes } from "./routes/admin_routes.js";
 import { PlanRoutes } from "./routes/plan_routes.js";
+import { PaymentRoutes } from "./routes/payment_routes.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,8 @@ PlanRoutes(app);
 
 //Using admin route
 AdminRoutes(app);
+
+PaymentRoutes(app);
 
 app.get("/", async (req, res) => {
   res.status(200).send({ message: "API is ready to go!" });
