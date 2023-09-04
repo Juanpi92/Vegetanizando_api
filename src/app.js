@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { connectDB } from "./infra/db.js";
 import cors from "cors";
 import { ProductRoutes } from "./routes/product_routes.js";
-import { AdminRoutes } from "./routes/admin_route.js";
+import { AdminRoutes } from "./routes/admin_routes.js";
 import { PlanRoutes } from "./routes/plan_routes.js";
 
 dotenv.config();
