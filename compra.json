@@ -1,0 +1,24 @@
+{
+  "user": "Pedro González",
+  "email": "pedro.gonzalez@gmail.com",
+  "celphone": "+55219108765",
+  "cpf": "666.777.888-99",
+  "address": "Calle 123, Ciudad J",
+  "status": "entregado",
+  "date": "2023-09-13T15:50:10.987+00:00",
+  "cart": [
+    {
+      "id": "64efbf53e5d8a84459ac3f83",
+      "name": "Bebida Tangerina",
+      "price": 20,
+      "quantity": 4
+    },
+    {
+      "id": "64ee673a42955c534b7a9905",
+      "name": "Torta de nozes",
+      "price": 15,
+      "quantity": 3
+    }
+  ],
+  "totalCart": 125
+}
