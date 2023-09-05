@@ -7,6 +7,8 @@ import { ProductRoutes } from "./routes/product_routes.js";
 import { AdminRoutes } from "./routes/admin_routes.js";
 import { PlanRoutes } from "./routes/plan_routes.js";
 import { PaymentRoutes } from "./routes/payment_routes.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +23,8 @@ app.use(
     exposedHeaders: ["auth-token"],
   })
 );
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Db connection
 connectDB();

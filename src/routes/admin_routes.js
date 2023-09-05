@@ -4,6 +4,82 @@ import jwt from "jsonwebtoken";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Admin:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         user:
+ *           type: string
+ *         email:
+ *           type: string
+ *         photo:
+ *           type: string
+ *         token:
+ *           type: string
+ *
+ * /login:
+ *   post:
+ *     summary: Login de Administrador
+ *     description: Realiza o login como administrador e obtém um token de autenticação.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Login bem-sucedido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Admin'
+ *       '401':
+ *         description: Credenciais inválidas
+ *       '400':
+ *         description: É necessário fornecer um endereço de e-mail e senha
+ *       '500':
+ *         description: Erro interno do servidor
+ *
+ * /password:
+ *   post:
+ *     summary: Gerar Hash de Senha
+ *     description: Gera um hash de senha a partir de uma senha fornecida.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: Hash de senha gerado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 hashedPassword:
+ *                   type: string
+ *                 match:
+ *                   type: boolean
+ *       '500':
+ *         description: Erro interno do servidor
+ */
+
 export const AdminRoutes = (app) => {
   const s3 = new S3Client({
     credentials: {
