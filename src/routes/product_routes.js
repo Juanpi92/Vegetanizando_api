@@ -26,8 +26,8 @@ export const ProductRoutes = (app) => {
       if (!req.file) {
         return res.status(400).send({ error: "Nenhuma imagem fornecida" });
       }
-      const { name, portion, price } = req.body;
-      if (!name || !portion || !price) {
+      const { name, portion, price, type } = req.body;
+      if (!name || !portion || !price || !type) {
         return res.status(400).send({ error: "Debe prencher todos os dados" });
       }
 
@@ -53,6 +53,7 @@ export const ProductRoutes = (app) => {
         name: name,
         portion: portion,
         price: Number(price),
+        type: type,
       };
       await Product.create(product);
 
@@ -89,6 +90,7 @@ export const ProductRoutes = (app) => {
           name: products[index].name,
           portion: products[index].portion,
           price: products[index].price,
+          type: products[index].type,
         };
       }
 
@@ -108,8 +110,8 @@ export const ProductRoutes = (app) => {
         if (!req.file) {
           return res.status(400).send({ error: "Nenhuma imagem fornecida" });
         }
-        const { name, portion, price } = req.body;
-        if (!name || !portion || !price) {
+        const { name, portion, price, type } = req.body;
+        if (!name || !portion || !price || !type) {
           return res
             .status(400)
             .send({ error: "Debe prencher todos os dados" });
@@ -141,7 +143,13 @@ export const ProductRoutes = (app) => {
         //Updating the change in the bd
         let product = await Product.findByIdAndUpdate(
           id_product,
-          { src: id_photo, name: name, portion: portion, price: price },
+          {
+            src: id_photo,
+            name: name,
+            portion: portion,
+            price: price,
+            type: type,
+          },
           { new: true }
         );
         //Create the new URL for the photo
@@ -163,6 +171,7 @@ export const ProductRoutes = (app) => {
           name: product.name,
           portion: product.portion,
           price: product.price,
+          type: product.type,
         };
 
         res.status(200).send(product);
@@ -175,15 +184,15 @@ export const ProductRoutes = (app) => {
   //patch the product
   app.patch("/product/:id", validate, async (req, res) => {
     try {
-      const { name, portion, price } = req.body;
-      if (!name || !portion || !price) {
+      const { name, portion, price, type } = req.body;
+      if (!name || !portion || !price || !type) {
         return res.status(400).send({ error: "Debe prencher todos os dados" });
       }
       //getting the id
       let id_product = req.params.id;
       let product = await Product.findByIdAndUpdate(
         id_product,
-        { name: name, portion: portion, price: price },
+        { name: name, portion: portion, price: price, type: type },
         { new: true }
       );
       //Create the new URL for the photo
@@ -202,6 +211,7 @@ export const ProductRoutes = (app) => {
         name: product.name,
         portion: product.portion,
         price: product.price,
+        type: product.type,
       };
 
       res.status(200).send(product);

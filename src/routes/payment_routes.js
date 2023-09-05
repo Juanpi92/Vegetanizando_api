@@ -27,13 +27,15 @@ export const PaymentRoutes = (app) => {
     const { token, total, email } = req.body;
     try {
       const stripe = new Stripe(stripeSecretKey);
+
+      const customer = await stripe.customers.create({
+        email: email,
+      });
       let charge = await stripe.charges.create({
-        amount: total * 100, // El total debe estar en centavos
-        currency: "BRL", // Cambia a BRL para reales
+        amount: total * 100,
+        currency: "BRL",
         source: token,
-        metadata: {
-          email: email, // Agrega el correo electrónico como metadato
-        },
+        customer: customer.id,
       });
       res.status(200).json({ message: "Pago exitoso", charge });
     } catch (error) {
