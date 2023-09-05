@@ -3,19 +3,17 @@ import { Purchase } from "../model/Purchase.js";
 
 export const PurchaseRoutes = (app) => {
   //Route to get all Purchases
-  app.get("/purchases",async (req, res) => {
+  app.get("/purchases", validate, async (req, res) => {
     try {
       let purchases = await Purchase.find();
       res.status(200).send(purchases);
-      
     } catch (error) {
       return res.status(500).send({ error: error });
     }
-
   });
 
   //Route to insert a purchase
-  app.post("/purchase", async (req, res) => {
+  app.post("/purchase", validate, async (req, res) => {
     let { purchase } = req.body;
     try {
       if (!purchase) {
@@ -31,21 +29,35 @@ export const PurchaseRoutes = (app) => {
   });
 
   //Route to update a purchase status
-  app.patch("/purchase/:id", validate, async (req, res) => {});
+  app.patch("/purchase/:id", validate, async (req, res) => {
+    try {
+      let id_purchase = req.params.id;
+      let status = req.body.status;
+      if (!status) {
+        return res.status(400).send({ error: "Debe prencher todos os dados" });
+      }
+      let purchase = await Purchase.findByIdAndUpdate(
+        id_purchase,
+        { status: status },
+        { new: true }
+      );
+      res.status(200).send(purchase);
+    } catch (error) {
+      return res.status(500).send({ error: error });
+    }
+  });
 
   //Route to delete a purchase
-  app.delete("/purchase/:id",async (req, res) => {
+  app.delete("/purchase/:id", validate, async (req, res) => {
     try {
       let id_purchase = req.params.id;
       let deleted = await Purchase.findByIdAndDelete(id_purchase);
       if (!deleted) {
-        return res.status(404).send({message: "Compra nao encontrada" });
+        return res.status(404).send({ message: "Compra nao encontrada" });
       }
       res.status(200).send({ message: "compra apagada corretamente" });
-      
     } catch (error) {
       return res.status(500).send({ error: error });
     }
-
   });
 };

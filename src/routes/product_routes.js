@@ -231,10 +231,15 @@ export const ProductRoutes = (app) => {
         Key: src_imagen.src,
       });
 
+      //Deleting the product of the database
+      let deleted = await Product.findByIdAndDelete(id_product);
+      if (!deleted) {
+        return res.status(404).send({ message: "Produto não encontrado" });
+      }
+
       // Command to delete the object from S3
       await s3.send(deleteCommand);
-      //Deleting the product of the database
-      await Product.findByIdAndDelete(id_product);
+
       res.status(200).send({ deleted: true });
     } catch (error) {
       res
