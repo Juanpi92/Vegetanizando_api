@@ -7,6 +7,9 @@ import { ProductRoutes } from "./routes/product_routes.js";
 import { AdminRoutes } from "./routes/admin_routes.js";
 import { PlanRoutes } from "./routes/plan_routes.js";
 import { PaymentRoutes } from "./routes/payment_routes.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
+import { PurchaseRoutes } from "./routes/purchase_routes.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +25,8 @@ app.use(
   })
 );
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 //Db connection
 connectDB();
 
@@ -34,7 +39,11 @@ PlanRoutes(app);
 //Using admin route
 AdminRoutes(app);
 
+//Using pyment routes
 PaymentRoutes(app);
+
+//Using purchase routes
+PurchaseRoutes(app);
 
 app.get("/", async (req, res) => {
   res.status(200).send({ message: "API is ready to go!" });
