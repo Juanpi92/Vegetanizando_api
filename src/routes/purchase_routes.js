@@ -13,7 +13,7 @@ export const PurchaseRoutes = (app) => {
   });
 
   //Route to insert a purchase
-  app.post("/purchase", validate, async (req, res) => {
+  app.post("/purchase", async (req, res) => {
     let { purchase } = req.body;
     try {
       if (!purchase) {
