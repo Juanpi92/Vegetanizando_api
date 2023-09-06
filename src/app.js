@@ -26,6 +26,10 @@ app.use(
 );
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  "/api-docs",
+  express.static("https://vegetanizando-api.vercel.app/api-docs/swagger-ui.css")
+);
 
 //Db connection
 connectDB();
