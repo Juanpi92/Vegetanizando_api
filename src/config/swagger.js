@@ -8,6 +8,11 @@ const options = {
       version: "1.0.0",
       description: "Descripción de tu API",
     },
+    servers: [
+      {
+        url: "https://vegetanizando-api.vercel.app/",
+      },
+    ],
   },
   apis: ["./src/routes/*.js"], // Ruta a tus archivos de definición de rutas
 };

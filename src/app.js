@@ -10,6 +10,7 @@ import { PaymentRoutes } from "./routes/payment_routes.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
 import { PurchaseRoutes } from "./routes/purchase_routes.js";
+import path from "path";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,12 @@ app.use(
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use(
+  "/api-docs",
+  express.static(path.join(process.cwd(), "/api-docs"), {
+    fallthrough: false,
+  })
+);
 
 //Db connection
 connectDB();
