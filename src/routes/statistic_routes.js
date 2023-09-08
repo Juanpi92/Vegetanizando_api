@@ -1,8 +1,9 @@
 import { validate } from "../authorization/auth.js";
+import { Product } from "../model/Product.js";
 import { Purchase } from "../model/Purchase.js";
 
 export const StatisticRoutes = (app) => {
-  app.get("/purchases_by_month", async (req, res) => {
+  app.get("/purchases_by_month", validate, async (req, res) => {
     try {
       const currentYear = new Date().getFullYear();
       const currentMonth = new Date().getMonth() + 1; // Sumamos 1 porque los meses en JavaScript son indexados desde 0
@@ -80,6 +81,21 @@ export const StatisticRoutes = (app) => {
 
       //
 
+      return res.status(200).send(result);
+    } catch (error) {
+      return res.status(500).send({ error: error });
+    }
+  });
+  app.get("/product_type", validate, async (req, res) => {
+    try {
+      const result = await Product.aggregate([
+        {
+          $group: {
+            _id: "$type",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
       return res.status(200).send(result);
     } catch (error) {
       return res.status(500).send({ error: error });

@@ -10,9 +10,6 @@ export const validate = (req, res, next) => {
       req.user = verified;
       next();
     } catch (error) {
-      if (error instanceof jwt.TokenExpiredError) {
-        return res.status(401).send({ mensagem: "Session Expired" });
-      }
       res.status(400).send("Invalid Token");
     }
   }

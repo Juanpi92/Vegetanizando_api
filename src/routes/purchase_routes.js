@@ -3,9 +3,16 @@ import { Purchase } from "../model/Purchase.js";
 
 export const PurchaseRoutes = (app) => {
   //Route to get all Purchases
-  app.get("/purchases", validate, async (req, res) => {
+  app.get("/purchases", async (req, res) => {
     try {
-      let purchases = await Purchase.find();
+      const currentDate = new Date();
+      const fiveDaysAgo = new Date(currentDate);
+      fiveDaysAgo.setHours(0, 0, 0, 0);
+      fiveDaysAgo.setDate(currentDate.getDate() - 5);
+      console.log(currentDate, fiveDaysAgo);
+      let purchases = await Purchase.find({
+        date: { $gt: fiveDaysAgo, $lte: currentDate },
+      });
       res.status(200).send(purchases);
     } catch (error) {
       return res.status(500).send({ error: error });
