@@ -11,6 +11,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
 import { PurchaseRoutes } from "./routes/purchase_routes.js";
 import path from "path";
+import { StatisticRoutes } from "./routes/statistic_routes.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -52,6 +53,9 @@ PaymentRoutes(app);
 
 //Using purchase routes
 PurchaseRoutes(app);
+
+//Getting the statistic
+StatisticRoutes(app);
 
 app.get("/", async (req, res) => {
   res.status(200).send({ message: "API is ready to go!" });

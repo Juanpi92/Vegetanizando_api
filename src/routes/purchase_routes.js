@@ -60,4 +60,20 @@ export const PurchaseRoutes = (app) => {
       return res.status(500).send({ error: error });
     }
   });
+  /*
+  //Insert Automatic
+  app.post("/InsertAllPurchase", async (req, res) => {
+    try {
+      let purchases = [];
+      for (let index = 0; index < purchases.length; index++) {
+        await Purchase.create(purchases[index]);
+      }
+
+      res.status(200).send({ message: "ok" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({ error: error });
+    }
+  });
+  */
 };
