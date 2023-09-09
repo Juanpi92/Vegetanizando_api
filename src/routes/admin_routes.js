@@ -143,7 +143,7 @@ export const AdminRoutes = (app) => {
       return res.status(500).send({ error: error });
     }
   });
-
+  /*
   app.post("/password", async (req, res) => {
     try {
       const { password } = req.body;
@@ -154,5 +154,5 @@ export const AdminRoutes = (app) => {
     } catch (error) {
       res.status(500).json({ error: "Error interno del servidor" });
     }
-  });
+  });*/
 };

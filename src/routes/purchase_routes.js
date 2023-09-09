@@ -3,7 +3,7 @@ import { Purchase } from "../model/Purchase.js";
 
 export const PurchaseRoutes = (app) => {
   //Route to get all Purchases
-  app.get("/purchases", async (req, res) => {
+  app.get("/purchases", validate, async (req, res) => {
     try {
       const currentDate = new Date();
       const fiveDaysAgo = new Date(currentDate);
