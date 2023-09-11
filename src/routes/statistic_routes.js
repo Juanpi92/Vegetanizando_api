@@ -30,25 +30,7 @@ export const StatisticRoutes = (app) => {
           $project: {
             _id: 0,
             year: "$_id.year",
-            month: {
-              $switch: {
-                branches: [
-                  { case: { $eq: ["$_id.month", 1] }, then: "Janeiro" },
-                  { case: { $eq: ["$_id.month", 2] }, then: "Fevereiro" },
-                  { case: { $eq: ["$_id.month", 3] }, then: "Março" },
-                  { case: { $eq: ["$_id.month", 4] }, then: "Abril" },
-                  { case: { $eq: ["$_id.month", 5] }, then: "Maio" },
-                  { case: { $eq: ["$_id.month", 6] }, then: "Junho" },
-                  { case: { $eq: ["$_id.month", 7] }, then: "Julho" },
-                  { case: { $eq: ["$_id.month", 8] }, then: "Agosto" },
-                  { case: { $eq: ["$_id.month", 9] }, then: "Setembro" },
-                  { case: { $eq: ["$_id.month", 10] }, then: "Outubro" },
-                  { case: { $eq: ["$_id.month", 11] }, then: "Novembro" },
-                  { case: { $eq: ["$_id.month", 12] }, then: "Dezembro" },
-                ],
-                default: "Mês Desconhecido",
-              },
-            },
+            month: "$_id.month", // Devuelve el número del mes directamente
             total: 1,
           },
         },
@@ -59,24 +41,8 @@ export const StatisticRoutes = (app) => {
           return a.year - b.year;
         }
 
-        const meses = {
-          Janeiro: 1,
-          Fevereiro: 2,
-          Março: 3,
-          Abril: 4,
-          Maio: 5,
-          Junho: 6,
-          Julho: 7,
-          Agosto: 8,
-          Setembro: 9,
-          Outubro: 10,
-          Novembro: 11,
-          Dezembro: 12,
-        };
-
-        return meses[a.month] - meses[b.month];
+        return a.month - b.month; // Ordena por número de mes
       });
-
       //
 
       return res.status(200).send(result);
