@@ -6,6 +6,7 @@ export const validate = (req, res, next) => {
     res.status(401).send("Access Denied");
   } else {
     try {
+      console.log(token);
       const verified = jwt.verify(token, process.env.SECRET_TOKEN);
       req.user = verified;
       next();
