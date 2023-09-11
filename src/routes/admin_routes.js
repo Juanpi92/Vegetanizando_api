@@ -121,10 +121,7 @@ export const AdminRoutes = (app) => {
               email: admin.email,
               photo: url,
             },
-            process.env.SECRET_TOKEN,
-            {
-              expiresIn: "2h",
-            }
+            process.env.SECRET_TOKEN
           );
           //Rewritte the admin info
           admin = {
