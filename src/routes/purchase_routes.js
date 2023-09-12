@@ -11,7 +11,7 @@ export const PurchaseRoutes = (app) => {
       fiveDaysAgo.setDate(currentDate.getDate() - 15);
       console.log(currentDate, fiveDaysAgo);
       let purchases = await Purchase.find({
-        date: { $gt: fiveDaysAgo, $lte: currentDate },
+        date: { $gte: fiveDaysAgo, $lte: currentDate },
       });
       res.status(200).send(purchases);
     } catch (error) {
