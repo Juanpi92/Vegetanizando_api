@@ -8,7 +8,7 @@ export const PurchaseRoutes = (app) => {
       const currentDate = new Date();
       const fiveDaysAgo = new Date(currentDate);
       fiveDaysAgo.setHours(0, 0, 0, 0);
-      fiveDaysAgo.setDate(currentDate.getDate() - 5);
+      fiveDaysAgo.setDate(currentDate.getDate() - 15);
       console.log(currentDate, fiveDaysAgo);
       let purchases = await Purchase.find({
         date: { $gt: fiveDaysAgo, $lte: currentDate },
