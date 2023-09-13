@@ -2,6 +2,185 @@ import { validate } from "../authorization/auth.js";
 import { Product } from "../model/Product.js";
 import { Purchase } from "../model/Purchase.js";
 
+/**
+ * @swagger
+ * tags:
+ *   name: Statistics
+ *   description: Endpoints para estadísticas
+ */
+
+/**
+ * @swagger
+ * /statistic/purchases_by_month:
+ *   get:
+ *     summary: Retorna as compras do último mês
+ *     tags: [Statistics]
+ *     security:
+ *       - JWTAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de compras do último mês
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   year:
+ *                     type: number
+ *                     description: Ano da compra
+ *                   month:
+ *                     type: number
+ *                     description: Mês da compra
+ *                   total:
+ *                     type: number
+ *                     description: Total de compras no mês
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+
+ * /statistic/product_type:
+ *   get:
+ *     summary: Retorna o número de produtos por tipo
+ *     tags: [Statistics]
+ *     security:
+ *       - JWTAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de produtos por tipo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     description: Tipo de produto
+ *                   count:
+ *                     type: number
+ *                     description: Quantidade de produtos desse tipo
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+
+ * /statistic/top_customer:
+ *   get:
+ *     summary: Retorna os principais clientes do último mês
+ *     tags: [Statistics]
+ *     security:
+ *       - JWTAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista dos principais clientes do último mês
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   user:
+ *                     type: string
+ *                     description: Nome do cliente
+ *                   celphone:
+ *                     type: string
+ *                     description: Número de celular do cliente
+ *                   totalSpent:
+ *                     type: number
+ *                     description: Total gasto pelo cliente no último mês
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+
+ * /statistic/top_product:
+ *   get:
+ *     summary: Retorna os principais produtos vendidos no último mês
+ *     tags: [Statistics]
+ *     security:
+ *       - JWTAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista dos principais produtos vendidos no último mês
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   productName:
+ *                     type: string
+ *                     description: Nome do produto
+ *                   totalSold:
+ *                     type: number
+ *                     description: Total de unidades vendidas do produto no último mês
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+
+ * /statistic/card:
+ *   get:
+ *     summary: Retorna estatísticas gerais compra no último mês
+ *     tags: [Statistics]
+ *     security:
+ *       - JWTAuth: []
+ *     responses:
+ *       200:
+ *         description: Estatísticas gerais de compra no último mês
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalClient:
+ *                   type: number
+ *                   description: Número total de clientes no último mês
+ *                 totalPurchases:
+ *                   type: number
+ *                   description: Número total de compras no último mês
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+ */
+
 export const StatisticRoutes = (app) => {
   app.get("/statistic/purchases_by_month", validate, async (req, res) => {
     try {

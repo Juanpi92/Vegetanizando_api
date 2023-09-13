@@ -6,26 +6,9 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Admin:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *         user:
- *           type: string
- *         email:
- *           type: string
- *         photo:
- *           type: string
- *         token:
- *           type: string
- *
  * /login:
  *   post:
- *     summary: Login de Administrador
- *     description: Realiza o login como administrador e obtém um token de autenticação.
+ *     summary: Faz login como administrador
  *     requestBody:
  *       required: true
  *       content:
@@ -35,49 +18,60 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
  *             properties:
  *               email:
  *                 type: string
+ *                 description: E-mail do administrador
  *               password:
  *                 type: string
+ *                 description: Senha do administrador
  *     responses:
- *       '200':
+ *       200:
  *         description: Login bem-sucedido
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Admin'
- *       '401':
- *         description: Credenciais inválidas
- *       '400':
- *         description: É necessário fornecer um endereço de e-mail e senha
- *       '500':
- *         description: Erro interno do servidor
- *
- * /password:
- *   post:
- *     summary: Gerar Hash de Senha
- *     description: Gera um hash de senha a partir de uma senha fornecida.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               password:
- *                 type: string
- *     responses:
- *       '201':
- *         description: Hash de senha gerado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 hashedPassword:
+ *                 id:
  *                   type: string
- *                 match:
- *                   type: boolean
- *       '500':
+ *                   description: ID do administrador
+ *                 user:
+ *                   type: string
+ *                   description: Nome de usuário do administrador
+ *                 email:
+ *                   type: string
+ *                   description: E-mail do administrador
+ *                 photo:
+ *                   type: string
+ *                   description: URL da foto do administrador
+ *                 token:
+ *                   type: string
+ *                   description: Token JWT de autenticação
+ *       400:
+ *         description: Requisição inválida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+ *       401:
+ *         description: Usuário não encontrado ou senha incorreta
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               description: Mensagem de erro
+ *       500:
  *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
  */
 
 export const AdminRoutes = (app) => {
