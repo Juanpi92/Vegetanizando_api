@@ -1,6 +1,196 @@
 import { validate } from "../authorization/auth.js";
 import { Purchase } from "../model/Purchase.js";
 
+/**
+ * @swagger
+ * tags:
+ *   name: Purchases
+ *   description: Endpoints para compras
+ */
+
+/**
+ * @swagger
+ * /purchases:
+ *   get:
+ *     summary: Retorna todas as compras dos últimos 2 dias
+ *     tags: [Purchases]
+ *     security:
+ *       - JWTAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de compras dos últimos 2 dias
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Purchase'
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+
+ *   post:
+ *     summary: Insere uma nova compra
+ *     tags: [Purchases]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               purchase:
+ *                 $ref: '#/components/schemas/Purchase'
+ *     responses:
+ *       201:
+ *         description: Compra inserida com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Mensagem de sucesso
+ *       400:
+ *         description: Requisição inválida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+
+ * /purchase/{id}:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       description: ID da compra
+ *       schema:
+ *         type: string
+
+ *   patch:
+ *     summary: Atualiza o status de uma compra existente
+ *     tags: [Purchases]
+ *     security:
+ *       - JWTAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID da compra a ser atualizada
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 description: Novo status da compra
+ *     responses:
+ *       200:
+ *         description: Compra atualizada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Purchase'
+ *       400:
+ *         description: Requisição inválida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+ *       401:
+ *         description: Não autorizado (Token JWT ausente ou inválido)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               description: Mensagem de erro
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+
+ *   delete:
+ *     summary: Deleta uma compra
+ *     tags: [Purchases]
+ *     security:
+ *       - JWTAuth: []
+ *     responses:
+ *       200:
+ *         description: Compra deletada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Mensagem de sucesso
+ *       401:
+ *         description: Não autorizado (Token JWT ausente ou inválido)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               description: Mensagem de erro
+ *       404:
+ *         description: Compra não encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Mensagem de erro
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensagem de erro
+ */
+
 export const PurchaseRoutes = (app) => {
   //Route to get all Purchases
   app.get("/purchases", validate, async (req, res) => {
