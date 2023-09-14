@@ -406,9 +406,9 @@ export const ProductRoutes = (app) => {
         price: Number(price),
         type: type,
       };
-      await Product.create(product);
+    let newProduct= await Product.create(product);
 
-      res.status(201).send({ message: "Produto inserido exitosamente" });
+      res.status(201).send(newProduct);
     } catch (error) {
       return res.status(500).send({ error: error });
     }
