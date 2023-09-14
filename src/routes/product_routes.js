@@ -408,7 +408,14 @@ export const ProductRoutes = (app) => {
       };
     let newProduct= await Product.create(product);
 
-      res.status(201).send(newProduct);
+      res.status(201).send({
+        src: id_photo,
+        name: name,
+        portion: portion,
+        price: Number(price),
+        type: type,
+        id:newProduct._id
+      });
     } catch (error) {
       return res.status(500).send({ error: error });
     }
