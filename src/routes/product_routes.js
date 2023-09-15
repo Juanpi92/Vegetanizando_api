@@ -406,7 +406,7 @@ export const ProductRoutes = (app) => {
         price: Number(price),
         type: type,
       };
-    let newProduct= await Product.create(product);
+      let newProduct = await Product.create(product);
 
       res.status(201).send({
         src: id_photo,
@@ -414,7 +414,7 @@ export const ProductRoutes = (app) => {
         portion: portion,
         price: Number(price),
         type: type,
-        id:newProduct._id
+        id: newProduct._id,
       });
     } catch (error) {
       return res.status(500).send({ error: error });
@@ -553,7 +553,6 @@ export const ProductRoutes = (app) => {
         { name: name, portion: portion, price: price, type: type },
         { new: true }
       );
-      //Create the new URL for the photo
       let getObjectParams = {
         Bucket: process.env.BUCKET_NAME,
         Key: product.src,
@@ -563,7 +562,6 @@ export const ProductRoutes = (app) => {
       let url = await getSignedUrl(s3, command2, {
         expiresIn: 518400,
       });
-
       product = {
         url: url,
         name: product.name,
@@ -574,6 +572,7 @@ export const ProductRoutes = (app) => {
 
       res.status(200).send(product);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: error });
     }
   });
