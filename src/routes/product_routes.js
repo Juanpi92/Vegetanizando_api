@@ -407,9 +407,19 @@ export const ProductRoutes = (app) => {
         type: type,
       };
       let newProduct = await Product.create(product);
+      //Create the image URL
+      let getObjectParams = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: newProduct.src,
+      };
+
+      let command2 = new GetObjectCommand(getObjectParams);
+      let url = await getSignedUrl(s3, command2, {
+        expiresIn: 518400,
+      });
 
       res.status(201).send({
-        src: id_photo,
+        url: url,
         name: name,
         portion: portion,
         price: Number(price),
