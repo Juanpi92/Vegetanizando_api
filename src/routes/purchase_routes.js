@@ -196,12 +196,10 @@ export const PurchaseRoutes = (app) => {
   app.get("/purchases", validate, async (req, res) => {
     try {
       const currentDate = new Date();
-      const fiveDaysAgo = new Date(currentDate);
-      fiveDaysAgo.setHours(0, 0, 0, 0);
-      fiveDaysAgo.setDate(currentDate.getDate() - 15);
-      console.log(currentDate, fiveDaysAgo);
+      const yesterday = new Date(currentDate);
+      yesterday.setDate(currentDate.getDate() - 30);
       let purchases = await Purchase.find({
-        date: { $gte: fiveDaysAgo, $lte: currentDate },
+        date: { $gte: yesterday, $lte: currentDate },
       });
       res.status(200).send(purchases);
     } catch (error) {
