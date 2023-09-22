@@ -7,6 +7,7 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import sharp from "sharp";
 import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
 import { validate } from "../authorization/auth.js";
 import { Product } from "../model/Product.js";
 
@@ -387,7 +388,7 @@ export const ProductRoutes = (app) => {
         .toBuffer();
 
       //Send the image to s3
-      let id_photo = `${req.file.originalname}`;
+      let id_photo = `${uuidv4() - req.file.originalname}`;
       const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: id_photo,
@@ -498,7 +499,7 @@ export const ProductRoutes = (app) => {
           .resize({ heigth: 600, width: 400, fit: "contain" })
           .toBuffer();
 
-        let id_photo = `${req.file.originalname}`;
+        let id_photo = `${uuidv4() - req.file.originalname}`;
         const params = {
           Bucket: process.env.BUCKET_NAME,
           Key: id_photo,
