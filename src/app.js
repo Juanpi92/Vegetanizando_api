@@ -12,6 +12,7 @@ import swaggerSpec from "./config/swagger.js";
 import { PurchaseRoutes } from "./routes/purchase_routes.js";
 import path from "path";
 import { StatisticRoutes } from "./routes/statistic_routes.js";
+import { StripeRoutes } from "./webhook/stripe_webhook.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -56,6 +57,9 @@ PurchaseRoutes(app);
 
 //Getting the statistic
 StatisticRoutes(app);
+
+//Webhook
+StripeRoutes(app);
 
 app.get("/", async (req, res) => {
   res.status(200).send({ message: "API is ready to go!" });
