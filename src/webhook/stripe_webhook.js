@@ -23,7 +23,7 @@ export const StripeRoutes = (app) => {
           service: "gmail",
           auth: {
             user: process.env.EMAIL,
-            pass: process.env.PASSWORD_EMAIL,
+            pass: process.env.EMAIL_PASSWORD,
           },
         });
 
